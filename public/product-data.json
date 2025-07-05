@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "CR 80 Square Ruled",
+    "price": 210,
+    "currency": "LKR",
+    "image": "cr-80-sq-5-150x150.png"
+  },
+  {
+    "id": 2,
+    "name": "CR 120 Single Ruled",
+    "price": 200,
+    "currency": "LKR",
+    "image": "cr-120-sin-4-150x150.png"
+  },
+  {
+    "id": 3,
+    "name": "CR 160 Square Ruled",
+    "price": 300,
+    "currency": "LKR",
+    "image": "cr-160-sq-4-150x150.png"
+  },
+  {
+    "id": 4,
+    "name": "EX 200 Single Ruled",
+    "price": 160,
+    "currency": "LKR",
+    "image": "a5-200-sin-4.png"
+  }
+]
