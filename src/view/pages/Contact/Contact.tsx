@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 
 type FormData = {
     email: string;
@@ -10,19 +10,40 @@ export function Contact() {
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: {errors},
+        reset,
     } = useForm<FormData>();
 
-    const onSubmit = (data: FormData) => {
-        console.log("Form data submitted:", data);
-        alert(`Submitted your case:\n${data.subject}`);
+    const onSubmit = async (data: FormData) => {
+        try {
+            const response = await fetch("http://localhost:3000/api/contacts/save", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                alert(`Error: ${result.error}`);
+            } else {
+                alert("✅ Your message has been submitted successfully!");
+                reset(); // Clear form after successful submission
+            }
+        } catch (error) {
+            console.error("Error submitting contact form:", error);
+            alert("❌ Failed to submit. Please try again later.");
+        }
     };
 
     return (
         <div className="max-w-md mx-auto my-10 p-8 bg-white rounded-xl shadow-md">
-            <h2 className="text-2xl font-semibold mb-6 text-center">Contact us</h2>
+            <h2 className="text-2xl font-semibold mb-6 text-center">Contact Us</h2>
 
             <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
+                {/* Email Field */}
                 <div className="flex flex-col">
                     <label className="mb-1 font-medium">Email:</label>
                     <input
@@ -40,11 +61,12 @@ export function Contact() {
                     />
                     {errors.email && (
                         <span className="text-red-600 text-sm mt-1">
-              {errors.email.message}
-            </span>
+                            {errors.email.message}
+                        </span>
                     )}
                 </div>
 
+                {/* Subject Field */}
                 <div className="flex flex-col">
                     <label className="mb-1 font-medium">Subject:</label>
                     <input
@@ -62,11 +84,12 @@ export function Contact() {
                     />
                     {errors.subject && (
                         <span className="text-red-600 text-sm mt-1">
-              {errors.subject.message}
-            </span>
+                            {errors.subject.message}
+                        </span>
                     )}
                 </div>
 
+                {/* Message Field */}
                 <div className="flex flex-col">
                     <label className="mb-1 font-medium">Message:</label>
                     <textarea
@@ -74,16 +97,21 @@ export function Contact() {
                         className={`border rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#4eaacf] ${
                             errors.message ? "border-red-500" : "border-gray-300"
                         }`}
-                        {...register("message", { required: true })}
+                        {...register("message", {
+                            required: "Message is required",
+                        })}
                     />
                     {errors.message && (
-                        <span className="text-red-600 text-sm mt-1">Message is Required</span>
+                        <span className="text-red-600 text-sm mt-1">
+                            {errors.message.message}
+                        </span>
                     )}
                 </div>
 
+                {/* Submit Button */}
                 <button
                     type="submit"
-                    className="bg-[#4eaacf] text-[#f0ecec] py-3 rounded-lg font-semibold text-lg hover:bg-[#4296b3] transition-colors duration-300"
+                    className="bg-[#4eaacf] text-white py-3 rounded-lg font-semibold text-lg hover:bg-[#4296b3] transition-colors duration-300"
                 >
                     Submit
                 </button>
@@ -91,5 +119,3 @@ export function Contact() {
         </div>
     );
 }
-
-
